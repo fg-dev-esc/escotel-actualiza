@@ -1,5 +1,6 @@
 import React from 'react';
 import { Upload, FileText } from 'lucide-react';
+import { CustomSelect } from './CustomSelect';
 
 /**
  * Componente genérico para campos del formulario
@@ -46,7 +47,7 @@ export function FormField({
           {...commonProps}
           value={value || ''}
           rows="4"
-          placeholder={`Ingrese ${config.label.toLowerCase()}`}
+          placeholder={`Ingrese ${config.label}`}
         />
         {error && <span className="form-field__error">{error}</span>}
       </div>
@@ -55,24 +56,16 @@ export function FormField({
 
   if (config.type === 'select') {
     return (
-      <div className="form-field">
-        <label htmlFor={fieldKey} className="form-field__label">
-          {config.label}
-          {config.required && <span className="form-field__required">*</span>}
-        </label>
-        <select
-          {...commonProps}
-          value={value || ''}
-        >
-          <option value="">Seleccione una opción</option>
-          {config.options?.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        {error && <span className="form-field__error">{error}</span>}
-      </div>
+      <CustomSelect
+        fieldKey={fieldKey}
+        label={config.label}
+        value={value || ''}
+        options={config.options || []}
+        onChange={onChange}
+        required={config.required}
+        error={error}
+        disabled={isDisabled}
+      />
     );
   }
 
@@ -144,7 +137,7 @@ export function FormField({
         {...commonProps}
         type={config.type}
         value={value || ''}
-        placeholder={`Ingrese ${config.label.toLowerCase()}`}
+        placeholder={`Ingrese ${config.label}`}
       />
       {error && <span className="form-field__error">{error}</span>}
     </div>

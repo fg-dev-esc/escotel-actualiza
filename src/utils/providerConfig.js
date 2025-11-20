@@ -189,7 +189,7 @@ const SHARED_FIELDS = {
     accept: '.pdf,.jpg,.jpeg,.png',
   },
   archivoCaratula: {
-    label: 'Carátula RFC',
+    label: 'Carátula Bancaria',
     type: 'file',
     required: false,
     section: 'fiscal',

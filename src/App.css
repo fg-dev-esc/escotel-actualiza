@@ -435,6 +435,137 @@ button:hover {
   transition: all 0.2s ease;
 }
 
+/* Custom Select */
+.custom-select {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select__button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.custom-select__button:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent);
+}
+
+.custom-select__button:focus {
+  outline: none;
+  border-color: var(--accent);
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 2px rgba(255, 47, 77, 0.15);
+}
+
+.custom-select__button--error {
+  border-color: var(--danger);
+  background-color: rgba(255, 143, 176, 0.08);
+}
+
+.custom-select__button--open {
+  border-color: var(--accent);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.custom-select__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.custom-select__value {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-select__icon {
+  flex-shrink: 0;
+  color: var(--accent);
+  transition: transform 0.2s ease;
+}
+
+.custom-select__button--open .custom-select__icon {
+  transform: rotate(180deg);
+}
+
+.custom-select__dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background-color: rgba(20, 1, 5, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom-select__list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.custom-select__option {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.custom-select__option:hover {
+  background-color: rgba(255, 47, 77, 0.2);
+}
+
+.custom-select__option--selected {
+  background-color: rgba(255, 47, 77, 0.3);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.custom-select__option:focus {
+  outline: none;
+  background-color: rgba(255, 47, 77, 0.25);
+}
+
+/* Mantener el select nativo como fallback */
 .form-field select {
   color-scheme: dark;
   appearance: none !important;
@@ -604,7 +735,6 @@ button:hover {
   transition: all 0.2s ease;
   text-align: left;
   width: fit-content;
-  margin: 0 auto;
 }
 
 .form-field__file-btn-icon {
