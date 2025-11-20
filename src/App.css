@@ -214,6 +214,7 @@ button:hover {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding: 0;
 }
 
 .provider-form--loading {
@@ -323,6 +324,7 @@ button:hover {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
+  width: 100%;
 }
 
 @media (min-width: 480px) {
@@ -403,6 +405,7 @@ button:hover {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  min-width: 0;
 }
 
 .form-field__label {
@@ -575,6 +578,7 @@ button:hover {
 /* File Input Field */
 .form-field--file {
   width: 100%;
+  min-width: 0;
 }
 
 .form-field__file-wrapper {

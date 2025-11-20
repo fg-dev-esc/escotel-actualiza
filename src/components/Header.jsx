@@ -5,7 +5,7 @@ export const Header = () => {
     <header className="masthead">
       <div className="logo-chip">
         <img src={escotelLogo} alt="Logotipo de Escotel" />
-        <span>Asistencia Vial</span>
+        <span>PORTAL DE PROVEEDORES</span>
       </div>
     </header>
   );
