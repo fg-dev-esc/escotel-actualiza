@@ -1,3 +1,6 @@
+import React from 'react';
+import { Upload, FileText } from 'lucide-react';
+
 /**
  * Componente genérico para campos del formulario
  * Soporta: text, email, tel, number, select, checkbox, textarea, file
@@ -91,6 +94,12 @@ export function FormField({
 
   if (config.type === 'file') {
     const fileName = value?.name || '';
+    const inputRef = React.useRef(null);
+
+    const handleButtonClick = () => {
+      inputRef.current?.click();
+    };
+
     return (
       <div className="form-field form-field--file">
         <label htmlFor={fieldKey} className="form-field__label">
@@ -99,11 +108,25 @@ export function FormField({
         </label>
         <div className="form-field__file-wrapper">
           <input
+            ref={inputRef}
             {...commonProps}
             type="file"
             accept={config.accept}
+            style={{ display: 'none' }}
           />
-          {fileName && <span className="form-field__file-name">{fileName}</span>}
+          <button
+            type="button"
+            onClick={handleButtonClick}
+            className="form-field__file-btn"
+            disabled={isDisabled}
+          >
+            <span className="form-field__file-btn-icon">
+              {fileName ? <FileText size={18} /> : <Upload size={18} />}
+            </span>
+            <span className="form-field__file-btn-text">
+              {fileName || 'Seleccionar archivo'}
+            </span>
+          </button>
         </div>
         {error && <span className="form-field__error">{error}</span>}
       </div>

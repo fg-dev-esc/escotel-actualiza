@@ -588,27 +588,58 @@ button:hover {
   position: relative;
 }
 
-.form-field--file input[type="file"] {
-  padding: 1rem;
+.form-field__file-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
   cursor: pointer;
-  background-color: rgba(255, 255, 255, 0.08);
-  border: 2px dashed var(--border);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
   border-radius: 10px;
-  transition: all 0.3s ease;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: fit-content;
+  margin: 0 auto;
 }
 
-.form-field--file input[type="file"]:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.12);
+.form-field__file-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.form-field__file-btn-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.form-field__file-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
   border-color: var(--accent);
-  transition: all 0.3s ease;
 }
 
-.form-field--file input[type="file"]:focus {
+.form-field__file-btn:hover:not(:disabled) .form-field__file-btn-icon {
+  color: var(--muted);
+}
+
+.form-field__file-btn:focus {
   outline: none;
   border-color: var(--accent);
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.08);
   box-shadow: 0 0 0 2px rgba(255, 47, 77, 0.15);
-  transition: all 0.3s ease;
+}
+
+.form-field__file-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .form-field__file-name {
