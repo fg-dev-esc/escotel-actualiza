@@ -221,6 +221,7 @@ const SHARED_FIELDS = {
     type: 'textarea',
     required: false,
     section: 'observations',
+    fullWidth: true,
   },
 };
 

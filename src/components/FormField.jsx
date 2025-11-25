@@ -38,7 +38,7 @@ export function FormField({
   // Renderizar según tipo de campo
   if (config.type === 'textarea') {
     return (
-      <div className="form-field">
+      <div className={`form-field ${config.fullWidth ? 'form-field--full-width' : ''}`}>
         <label htmlFor={fieldKey} className="form-field__label">
           {config.label}
           {config.required && <span className="form-field__required">*</span>}
