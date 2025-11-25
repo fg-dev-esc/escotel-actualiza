@@ -95,7 +95,7 @@ export function FormField({
 
     return (
       <div className="form-field form-field--file">
-        <label htmlFor={fieldKey} className="form-field__label">
+        <label htmlFor={fieldKey} className="form-field__label" style={{ textAlign: 'center' }}>
           {config.label}
           {config.required && <span className="form-field__required">*</span>}
         </label>

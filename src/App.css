@@ -731,6 +731,7 @@ button:hover {
   flex-direction: column;
   gap: 0.5rem;
   position: relative;
+  align-items: center;
 }
 
 .form-field__file-btn {

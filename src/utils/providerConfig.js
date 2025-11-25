@@ -182,17 +182,17 @@ const SHARED_FIELDS = {
     section: 'fiscal',
   },
   archivoCSF: {
-    label: 'Comprobante de Situación Fiscal (CSF)',
+    label: 'CSF',
     type: 'file',
     required: false,
-    section: 'fiscal',
+    section: 'important',
     accept: '.pdf,.jpg,.jpeg,.png',
   },
   archivoCaratula: {
     label: 'Carátula Bancaria',
     type: 'file',
     required: false,
-    section: 'fiscal',
+    section: 'important',
     accept: '.pdf,.jpg,.jpeg,.png',
   },
   // Configuración
@@ -277,10 +277,10 @@ export const PERSONA_MORAL_FIELDS = {
  * Orden de secciones y campos dentro de cada sección
  */
 export const SECTION_ORDER = {
-  basicInfo: {
-    title: 'Información Básica',
-    order: 1,
-  },
+  // basicInfo: {
+  //   title: 'Información Básica',
+  //   order: 1,
+  // },
   address: {
     title: 'Domicilio Fiscal',
     order: 2,
@@ -289,18 +289,22 @@ export const SECTION_ORDER = {
     title: 'Datos de Contacto',
     order: 3,
   },
-  fiscal: {
-    title: 'Información Fiscal',
+  // fiscal: {
+  //   title: 'Información Fiscal',
+  //   order: 4,
+  // },
+  important: {
+    title: 'Información Importante',
     order: 4,
   },
-  config: {
-    title: 'Configuración',
-    order: 5,
-  },
-  observations: {
-    title: 'Observaciones',
-    order: 6,
-  },
+  // config: {
+  //   title: 'Configuración',
+  //   order: 5,
+  // },
+  // observations: {
+  //   title: 'Observaciones',
+  //   order: 6,
+  // },
 };
 
 /**
