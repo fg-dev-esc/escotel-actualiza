@@ -48,7 +48,7 @@ export function ProviderForm({ providerId }) {
       )}
 
       {/* Mensaje de error */}
-      {hasError && (
+      {/* {hasError && (
         <div className="form-alert form-alert--error">
           <AlertCircle size={20} />
           <div className="form-alert__content">
@@ -56,7 +56,7 @@ export function ProviderForm({ providerId }) {
             <p className="form-alert__message">No se pudieron cargar los datos. Usando datos de ejemplo.</p>
           </div>
         </div>
-      )}
+      )} */}
 
       <form onSubmit={handleSubmit} className="provider-form__form">
         {/* Secciones del formulario */}
