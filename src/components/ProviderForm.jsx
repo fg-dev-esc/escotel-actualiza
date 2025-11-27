@@ -15,6 +15,7 @@ export function ProviderForm({ providerId }) {
     sending,
     hasError,
     successMessage,
+    showSuccess,
     hasChanges,
     handleFieldChange,
     handleSubmit,
@@ -36,28 +37,6 @@ export function ProviderForm({ providerId }) {
 
   return (
     <div className="provider-form">
-      {/* Mensaje de éxito */}
-      {successMessage && (
-        <div className="form-alert form-alert--success">
-          <CheckCircle size={20} />
-          <div className="form-alert__content">
-            <p className="form-alert__title">Éxito</p>
-            <p className="form-alert__message">{successMessage}</p>
-          </div>
-        </div>
-      )}
-
-      {/* Mensaje de error */}
-      {/* {hasError && (
-        <div className="form-alert form-alert--error">
-          <AlertCircle size={20} />
-          <div className="form-alert__content">
-            <p className="form-alert__title">Error</p>
-            <p className="form-alert__message">No se pudieron cargar los datos. Usando datos de ejemplo.</p>
-          </div>
-        </div>
-      )} */}
-
       <form onSubmit={handleSubmit} className="provider-form__form">
         {/* Secciones del formulario */}
         <div className="provider-form__sections">
@@ -86,13 +65,20 @@ export function ProviderForm({ providerId }) {
           </button>
           <button
             type="submit"
-            disabled={sending || !hasChanges}
-            className="provider-form__btn provider-form__btn--submit"
+            disabled={sending || !hasChanges || showSuccess}
+            className={`provider-form__btn provider-form__btn--submit ${
+              showSuccess ? 'provider-form__btn--success' : ''
+            }`}
           >
             {sending ? (
               <>
                 <Loader size={18} className="spin" />
                 <span>Guardando...</span>
+              </>
+            ) : showSuccess ? (
+              <>
+                <CheckCircle size={18} />
+                <span>Guardado correctamente</span>
               </>
             ) : (
               <span>Guardar cambios</span>

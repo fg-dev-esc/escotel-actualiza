@@ -6,6 +6,95 @@ import {
 } from '../utils/providerConfig';
 
 /**
+ * Mapea los datos del formulario al formato esperado por la API
+ */
+const mapFormDataToApiData = (formData) => {
+  // Convertir strings vacíos a null para que coincidan con el payload esperado
+  const getValue = (value) => {
+    if (value === '' || value === undefined) return null;
+    return value;
+  };
+
+  return {
+    proveedorID: getValue(formData.proveedorID),
+    tipoPersona: getValue(formData.tipoPersona),
+    nombre: getValue(formData.nombre),
+    apellidoPaterno: getValue(formData.apellidoPaterno),
+    apellidoMaterno: getValue(formData.apellidoMaterno),
+    razonSocial: getValue(formData.razonSocial),
+    rfc: getValue(formData.rfc),
+    nombreComercial: getValue(formData.nombreComercial),
+    nombreVialidad: getValue(formData.nombreVialidad),
+    noExterior: getValue(formData.noExterior),
+    noInterior: getValue(formData.noInterior),
+    nombreColonia: getValue(formData.nombreColonia),
+    cp: getValue(formData.cp),
+    entidadFederativa: getValue(formData.entidadFederativa),
+    nombreMunicipio: getValue(formData.nombreMunicipio),
+    // Mapear contacto administrativo a contacto general
+    contactoNombre: getValue(formData.contactoAdminNombre),
+    contactoEmail: getValue(formData.contactoAdminEmail),
+    contactoTelefono1: getValue(formData.contactoAdminTelefono),
+    // Mapear contacto operativo
+    contactoOperaciones: getValue(formData.contactoOperNombre),
+    emailOperaciones: getValue(formData.contactoOperEmail),
+    telefonoOperaciones1: getValue(formData.contactoOperTelefono),
+    telefonoOperaciones2: null,
+    telefonoOperaciones3: null,
+    regimenFiscalId: getValue(formData.regimenFiscalId),
+    iva: getValue(formData.iva),
+    ivaRetenido: getValue(formData.ivaRetenido),
+    isrRetenido: getValue(formData.isrRetenido),
+    constanciaSituacionF: getValue(formData.archivoCSF),
+    caratulaEdoCta: getValue(formData.archivoCaratula),
+    esProveedorInterno: formData.esProveedorInterno === true ? true : false,
+    esProveedorCritico: formData.esProveedorCritico === true ? true : false,
+    prioridad: getValue(formData.prioridad),
+    comentarios: getValue(formData.comentarios),
+  };
+};
+
+/**
+ * Mapea los datos que vienen de la API al formato esperado por el formulario
+ */
+const mapApiDataToFormData = (apiData) => {
+  return {
+    tipoPersona: apiData.tipoPersona || 'Moral',
+    nombre: apiData.nombre || '',
+    apellidoPaterno: apiData.apellidoPaterno || '',
+    apellidoMaterno: apiData.apellidoMaterno || '',
+    razonSocial: apiData.razonSocial || '',
+    rfc: apiData.rfc || '',
+    nombreComercial: apiData.nombreComercial || '',
+    nombreVialidad: apiData.nombreVialidad || '',
+    noExterior: apiData.noExterior || '',
+    noInterior: apiData.noInterior || '',
+    nombreColonia: apiData.nombreColonia || '',
+    cp: apiData.cp || '',
+    entidadFederativa: apiData.entidadFederativa || '',
+    nombreMunicipio: apiData.nombreMunicipio || '',
+    // Contacto administrativo (mapear desde contacto general)
+    contactoAdminNombre: apiData.contactoNombre || '',
+    contactoAdminEmail: apiData.contactoEmail || '',
+    contactoAdminTelefono: apiData.contactoTelefono1 || '',
+    // Contacto operativo
+    contactoOperNombre: apiData.contactoOperaciones || '',
+    contactoOperEmail: apiData.emailOperaciones || '',
+    contactoOperTelefono: apiData.telefonoOperaciones1 || '',
+    regimenFiscalId: apiData.regimenFiscalId || '',
+    iva: apiData.iva || 0,
+    ivaRetenido: apiData.ivaRetenido || 0,
+    isrRetenido: apiData.isrRetenido || 0,
+    archivoCSF: apiData.constanciaSituacionF || '',
+    archivoCaratula: apiData.caratulaEdoCta || '',
+    esProveedorInterno: apiData.esProveedorInterno || false,
+    esProveedorCritico: apiData.esProveedorCritico || false,
+    prioridad: apiData.prioridad || '',
+    comentarios: apiData.comentarios || '',
+  };
+};
+
+/**
  * Datos mock para demostración cuando falla la conexión al API
  */
 const getMockProviderData = (personType) => {
@@ -77,27 +166,26 @@ export const useProviderForm = (providerId) => {
     const loadProviderData = async () => {
       try {
         setLoading(true);
-        // TODO: Reemplazar con tu endpoint real
-        const apiUrl = `${import.meta.env.VITE_API_URL}/providers/${providerId}`;
-
-        // Simular delay de red
-        await new Promise(resolve => setTimeout(resolve, 500));
+        const apiUrl = `https://dev-sigsa.backend.escotel.mx/api/DatosProveedores/GetDatosProveedor/${providerId}`;
 
         const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error(`Error al cargar datos: ${response.statusText}`);
         }
 
-        const data = await response.json();
+        const apiData = await response.json();
+
+        // Mapear datos de la API al formato del formulario
+        const mappedData = mapApiDataToFormData(apiData);
 
         // Determinar el tipo de persona basándose en los datos
-        const detectedPersonType = data.tipoPersona === 'Física'
+        const detectedPersonType = mappedData.tipoPersona === 'Física'
           ? PERSON_TYPES.FISICA
           : PERSON_TYPES.MORAL;
 
         setPersonType(detectedPersonType);
-        setFormData(data);
-        setOriginalData(data);
+        setFormData(mappedData);
+        setOriginalData(mappedData);
       } catch (error) {
         console.error('Error loading provider data:', error);
         setHasError(true);
@@ -137,24 +225,13 @@ export const useProviderForm = (providerId) => {
   }, [errors]);
 
   /**
-   * Valida el formulario
+   * Valida el formulario - solo valida campos mostrados
    */
   const validateForm = useCallback(() => {
-    const newErrors = {};
-    const fields = getFieldsByPersonType(personType);
-
-    Object.entries(fields).forEach(([fieldKey, fieldConfig]) => {
-      if (fieldConfig.required) {
-        const value = formData[fieldKey];
-        if (value === '' || value === null || value === undefined) {
-          newErrors[fieldKey] = `${fieldConfig.label} es requerido`;
-        }
-      }
-    });
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [personType, formData]);
+    // No validar nada, solo permitir enviar lo que viene de la API
+    setErrors({});
+    return true;
+  }, []);
 
   /**
    * Envía los datos actualizados al servidor
@@ -172,15 +249,34 @@ export const useProviderForm = (providerId) => {
         setHasError(false);
         setSuccessMessage(null);
 
-        // TODO: Reemplazar con tu endpoint real
-        const apiUrl = `${import.meta.env.VITE_API_URL}/providers/${providerId}`;
+        // Mapear datos del formulario al formato de la API
+        const apiData = mapFormDataToApiData(formData);
+
+        // Crear FormData para enviar como multipart/form-data
+        const formDataToSend = new FormData();
+
+        // Agregar proveedorId
+        formDataToSend.append('proveedorId', providerId);
+
+        // Agregar todos los campos mapeados de la API
+        Object.entries(apiData).forEach(([key, value]) => {
+          if (value !== undefined) {
+            // Si es un archivo (objeto File), agregarlo directamente
+            if (value instanceof File) {
+              formDataToSend.append(key, value);
+            } else {
+              // Convertir null a cadena vacía, otros valores a string
+              const stringValue = value === null ? '' : String(value);
+              formDataToSend.append(key, stringValue);
+            }
+          }
+        });
+
+        const apiUrl = `https://dev-sigsa.backend.escotel.mx/api/DatosProveedores/Actualizar`;
 
         const response = await fetch(apiUrl, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
+          body: formDataToSend,
         });
 
         if (!response.ok) {
@@ -189,6 +285,11 @@ export const useProviderForm = (providerId) => {
 
         setSuccessMessage('Datos actualizados correctamente');
         setOriginalData(formData);
+
+        // Limpiar mensaje de éxito después de 3 segundos
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 3000);
       } catch (error) {
         console.error('Error updating provider:', error);
         setHasError(true);
@@ -217,6 +318,8 @@ export const useProviderForm = (providerId) => {
     return JSON.stringify(formData) !== JSON.stringify(originalData);
   }, [formData, originalData]);
 
+  const showSuccess = Boolean(successMessage);
+
   return {
     personType,
     formData,
@@ -225,6 +328,7 @@ export const useProviderForm = (providerId) => {
     sending,
     hasError,
     successMessage,
+    showSuccess,
     hasChanges: hasChanges(),
     handleFieldChange,
     handleSubmit,

@@ -8,8 +8,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/gps/:id" element={<App />} />
-        <Route path="/" element={<Navigate to="/gps/default" replace />} />
+        <Route path="/:providerId" element={<App />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
